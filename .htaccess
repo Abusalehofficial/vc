@@ -1,0 +1,155 @@
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule ^([a-zA-Z0-9-_/]+)$ index.php [QSA]
+
+ 
+
+RewriteCond %{THE_REQUEST} \.php
+RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+
+# ============================================
+# 1. Security Headers
+# ============================================
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ============================================
+# 2. Disable Directory Listing
+# ============================================
+Options -Indexes +FollowSymLinks
+
+# ============================================
+# 3. File Protection
+# ============================================
+# Block .htaccess itself
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block sensitive files but allow specific exceptions
+<FilesMatch "\.(env|log|sql|bak|backup|config|ini|conf|yml|yaml|xml|txt|md|gitignore|gitmodules)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block JSON files except specific ones
+<FilesMatch "\.json$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Allow specific JSON files that are safe for public access
+<Files "instructions.json">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# You can add more safe JSON files here if needed
+<Files "translations.json">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Block access to specific sensitive files
+<Files ~ "^(composer\.(json|lock)|package\.(json|lock)|\.env.*|config\.php|database\.php|\.git.*|\.htaccess|\.htpasswd|readme\.txt|license\.txt|changelog\.txt)$">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Rest of your security rules...
+
+# Block downloads
+<FilesMatch "\.(mp3|mp4|pdf|zip|rar|tar)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Block all .ht files
+<Files ~ "^\.ht">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# ============================================
+# 4. PHP Handler (cPanel)
+# ============================================
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php74 .php .php7 .phtml
+</IfModule>
+
+# ============================================
+# 5. Rewrite Rules (ORDER MATTERS!)
+# ============================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # ----------------------------------------
+    # 5.1 Security: Block Directory Traversal
+    # ----------------------------------------
+    RewriteCond %{THE_REQUEST} (\.\./|\.\.\.) [NC]
+    RewriteRule .* - [F,L]
+    
+    # ----------------------------------------
+    # 5.2 Security: Block SQL Injection (Refined)
+    # ----------------------------------------
+    RewriteCond %{QUERY_STRING} (\bunion\b.*\bselect\b)|(\binsert\b.*\binto\b)|(\bdelete\b.*\bfrom\b)|(\bdrop\b.*\btable\b) [NC]
+    RewriteRule .* - [F,L]
+    
+    # Block SQL comment injection
+    RewriteCond %{QUERY_STRING} (\%27)|(\')|(\-\-)|(%23)|(#) [NC]
+    RewriteCond %{QUERY_STRING} !^(user_pref_curr|show)= [NC]
+    RewriteRule .* - [F,L]
+    
+    # ----------------------------------------
+    # 5.3 Security: Block Bad Bots
+    # ----------------------------------------
+    RewriteCond %{HTTP_USER_AGENT} ^.*(badbot|maliciousbot|semrush|ahrefs).*$ [NC]
+    RewriteRule ^.*$ - [F,L]
+    
+    RewriteCond %{HTTP_REFERER} ^http://.*(badreferer|malicioussite).*$ [NC]
+    RewriteRule ^.*$ - [F,L]
+    
+    # ----------------------------------------
+    # 5.4 Force HTTPS (Before other rewrites)
+    # ----------------------------------------
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # ----------------------------------------
+    # 5.5 Remove .php Extension (Redirect)
+    # ----------------------------------------
+    RewriteCond %{THE_REQUEST} \.php [NC]
+    RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+    
+    # ----------------------------------------
+    # 5.6 Main Application Router
+    # ----------------------------------------
+    # Skip if file exists
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Route everything to index.php
+    RewriteRule ^([a-zA-Z0-9-_/]+)$ index.php [QSA,L]
+</IfModule>
+
+# ============================================
+# 6. REMOVED: AllowOverride None
+# ============================================
+# DO NOT ADD "AllowOverride None" - it disables all rewrite rules!
+
+# ============================================
+# 7. Optional: Country Blocking (Uncomment if needed)
+# ============================================
+# <IfModule mod_geoip.c>
+#     SetEnvIf GEOIP_COUNTRY_CODE ^(KH|PK|ID|CN|TR|BR|ES)$ BlockCountry
+#     Order allow,deny
+#     Allow from all
+#     Deny from env=BlockCountry
+# </IfModule>

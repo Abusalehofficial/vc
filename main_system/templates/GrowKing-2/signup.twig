@@ -1,0 +1,80 @@
+{% include 'header.twig' %}
+
+<div class="container-fluid px-3 px-lg-5 py-5" style="max-width:480px;margin:auto">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h5 class="mb-4 text-center">
+        <i class="fas fa-user-plus"></i> Create Account
+      </h5>
+
+      {% if errorText %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorText }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endif %}
+      {% if successText %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successText }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endif %}
+
+      <form method="post" action="">
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signup.username'] }}</label>
+          <input type="text" name="username" class="form-control" required>
+        </div>
+
+        {% if settings["register_name"] == 2 %}
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signup.name'] }}</label>
+          <input type="text" name="name" class="form-control" value="{{ data.name|default('') }}">
+        </div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signup.email'] }}</label>
+          <input type="email" name="email" class="form-control" value="{{ data.email|default('') }}" required>
+        </div>
+
+        {% if settings["register_whatsapp"] == 2 %}
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signup.telephone'] }}</label>
+          <input type="tel" name="telephone" class="form-control" value="{{ data.telephone|default('') }}">
+        </div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signup.password'] }}</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signup.confirm.password'] }}</label>
+          <input type="password" name="password_again" class="form-control" required>
+        </div>
+
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" name="terms" value="1" id="terms" required>
+          <label class="form-check-label" for="terms">{{ lang['signup.accept_terms_text'] }}</label>
+        </div>
+
+        {% if captcha %}
+        <div class="mb-3">
+          <div class="g-recaptcha" data-sitekey="{{ captchaKey }}"></div>
+        </div>
+        {% endif %}
+
+        <input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary w-100">{{ lang['signup.button'] }}</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <small>Already have an account? <a href="/" class="text-decoration-none">Sign in</a></small>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.twig' %}

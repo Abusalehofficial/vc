@@ -1,0 +1,54 @@
+{% include 'header.twig' %}
+
+<div class="container-fluid px-3 px-lg-5 py-5" style="max-width:480px;margin:auto">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+      <h5 class="mb-4 text-center">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </h5>
+
+      {% if errorText %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorText }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endif %}
+      {% if successText %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ successText }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endif %}
+
+      <form method="post" action="">
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signin.username'] }}</label>
+          <input type="text" name="username" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">{{ lang['signin.password'] }}</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+
+        {% if captcha %}
+          <div class="mb-3">
+            <div class="g-recaptcha" data-sitekey="{{ captchaKey }}"></div>
+          </div>
+        {% endif %}
+
+        <input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary w-100">{{ lang['signin.button'] }}</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <small>
+          <a href="/resetpassword" class="text-decoration-none">{{ lang['signin.password.lost'] }}</a> |
+          <a href="/signup" class="text-decoration-none">Create account</a>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'footer.twig' %}

@@ -1,0 +1,15 @@
+{
+    "name": "abusalehofficial/fsplib",
+    "description": "A GREAT PROJECT OF FSP BY ABUSALEH",
+    "type": "project",
+    "require": {
+        "php": "^7.4",
+               "peppeocchi/php-cron-scheduler": "4.*"
+
+    },
+    "config": {
+        "platform": {
+            "php": "7.4.0"
+        }
+    }
+}

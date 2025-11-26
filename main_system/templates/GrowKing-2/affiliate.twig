@@ -1,0 +1,943 @@
+{% include 'header.twig' %}
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- Toastr -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<style>
+/* Modern Professional Affiliate Styles */
+.affiliate-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.affiliate-header h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.affiliate-header p {
+  opacity: 0.95;
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0,0,0,0.05);
+  height: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.stat-icon.blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+.stat-icon.green { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #047857; }
+.stat-icon.cyan { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #0891b2; }
+.stat-icon.orange { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #ea580c; }
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.link-card, .withdraw-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+  height: 100%;
+}
+
+.link-card label, .withdraw-card label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+  display: block;
+  font-size: 0.95rem;
+}
+
+.ref-link-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: #f9fafb;
+  color: #111827;
+  font-family: 'Courier New', monospace;
+  transition: all 0.3s;
+}
+
+.ref-link-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+}
+
+.btn-copy {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.btn-copy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.btn-withdraw {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.btn-withdraw:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);
+}
+
+.amount-input {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.help-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.tabs-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+.nav-tabs-custom {
+  border-bottom: 2px solid #f3f4f6;
+  padding: 0 1.5rem;
+  background: #fafbfc;
+}
+
+.nav-tabs-custom .nav-link {
+  border: none;
+  padding: 1rem 1.5rem;
+  color: #6b7280;
+  font-weight: 600;
+  transition: all 0.3s;
+  position: relative;
+  background: transparent;
+}
+
+.nav-tabs-custom .nav-link:hover {
+  color: #667eea;
+}
+
+.nav-tabs-custom .nav-link.active {
+  color: #667eea;
+  background: transparent;
+}
+
+.nav-tabs-custom .nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.table-container {
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.custom-table thead th {
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.custom-table tbody td {
+  padding: 1rem;
+  color: #111827;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.custom-table tbody tr {
+  transition: background 0.2s;
+}
+
+.custom-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.badge-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.badge-pending {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.badge-rejected {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #9ca3af;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.btn-load-more {
+  background: white;
+  border: 2px solid #e5e7eb;
+  color: #667eea;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-load-more:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .stat-value {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .affiliate-header {
+    padding: 1.5rem;
+  }
+  
+  .affiliate-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .stat-card {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .affiliate-header {
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+  
+  .affiliate-header h2 {
+    font-size: 1.35rem;
+  }
+  
+  .affiliate-header p {
+    font-size: 0.9rem;
+  }
+  
+  .stat-card {
+    padding: 1.25rem;
+  }
+  
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+  }
+  
+  .link-card, .withdraw-card {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .btn-copy, .btn-withdraw {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .nav-tabs-custom {
+    padding: 0 1rem;
+  }
+  
+  .nav-tabs-custom .nav-link {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .table-container {
+    padding: 1rem;
+  }
+  
+  .custom-table thead th {
+    font-size: 0.8rem;
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .custom-table tbody td {
+    font-size: 0.875rem;
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 1rem;
+  }
+  
+  .stat-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+  }
+  
+  .stat-value {
+    font-size: 1.35rem;
+  }
+  
+  .ref-link-input, .amount-input {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+  }
+  
+  .help-text {
+    font-size: 0.8rem;
+  }
+  
+  .custom-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .custom-table thead,
+  .custom-table tbody {
+    display: table;
+    width: 100%;
+  }
+}
+
+.spinner-border-custom {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid #e5e7eb;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+<div class="container-fluid px-3 px-md-4 py-4">
+  <!-- Professional Header -->
+  <div class="affiliate-header">
+    <h2><i class="fas fa-users-cog me-2"></i>Affiliate Program</h2>
+    <p>Earn 10% commission on every order your referrals make</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-3 mb-4" id="stats-container">
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <i class="fas fa-mouse-pointer"></i>
+        </div>
+        <div class="stat-label">Total Clicks</div>
+        <div class="stat-value" id="stat-clicks">-</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <i class="fas fa-user-plus"></i>
+        </div>
+        <div class="stat-label">Total Signups</div>
+        <div class="stat-value" id="stat-signups">-</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-icon cyan">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value" id="stat-orders">-</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-icon orange">
+          <i class="fas fa-wallet"></i>
+        </div>
+        <div class="stat-label">Available</div>
+        <div class="stat-value" id="stat-balance">-</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Referral Link & Withdraw -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-lg-7">
+      <div class="link-card">
+        <label><i class="fas fa-link me-2"></i>Your Referral Link</label>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+          <input type="text" class="ref-link-input flex-grow-1" id="ref-link" readonly>
+          <button class="btn-copy" onclick="copyRefLink()">
+            <i class="fas fa-copy me-1"></i>Copy
+          </button>
+        </div>
+        <div class="help-text">Share this link to earn 10% commission on all orders</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-5">
+      <div class="withdraw-card">
+        <label><i class="fas fa-money-bill-wave me-2"></i>Withdraw Earnings</label>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+          <input type="number" class="amount-input flex-grow-1" id="withdraw-amount" placeholder="0.00" step="0.01" min="10">
+          <button class="btn-withdraw" onclick="requestWithdrawal()">
+            <i class="fas fa-paper-plane me-1"></i>Request
+          </button>
+        </div>
+        <div class="help-text">Minimum withdrawal: $10</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-container">
+    <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="tab" href="#earnings-tab">
+          <i class="fas fa-coins me-2"></i><span class="d-none d-sm-inline">Earnings </span>History
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#referrals-tab">
+          <i class="fas fa-users me-2"></i><span class="d-none d-sm-inline">My </span>Referrals
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="tab" href="#withdrawals-tab">
+          <i class="fas fa-history me-2"></i><span class="d-none d-sm-inline">Withdrawal </span>History
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <!-- Earnings Tab -->
+      <div class="tab-pane fade show active" id="earnings-tab">
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Order</th>
+                <th>Commission</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="earnings-tbody">
+              <tr>
+                <td colspan="5" class="text-center py-5">
+                  <div class="spinner-border-custom mx-auto mb-2"></div>
+                  <div class="text-muted">Loading...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center py-3">
+          <button class="btn-load-more" id="load-more-earnings" style="display:none;">
+            <i class="fas fa-chevron-down me-1"></i>Load More
+          </button>
+        </div>
+      </div>
+
+      <!-- Referrals Tab -->
+      <div class="tab-pane fade" id="referrals-tab">
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registered</th>
+                <th>Orders</th>
+                <th>Spent</th>
+              </tr>
+            </thead>
+            <tbody id="referrals-tbody">
+              <tr>
+                <td colspan="5" class="text-center py-5">
+                  <div class="spinner-border-custom mx-auto mb-2"></div>
+                  <div class="text-muted">Loading...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center py-3">
+          <button class="btn-load-more" id="load-more-referrals" style="display:none;">
+            <i class="fas fa-chevron-down me-1"></i>Load More
+          </button>
+        </div>
+      </div>
+
+      <!-- Withdrawals Tab -->
+      <div class="tab-pane fade" id="withdrawals-tab">
+        <div class="table-container">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Processed</th>
+                <th class="d-none d-lg-table-cell">Notes</th>
+              </tr>
+            </thead>
+            <tbody id="withdrawals-tbody">
+              <tr>
+                <td colspan="5" class="text-center py-5">
+                  <div class="spinner-border-custom mx-auto mb-2"></div>
+                  <div class="text-muted">Loading...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="text-center py-3">
+          <button class="btn-load-more" id="load-more-withdrawals" style="display:none;">
+            <i class="fas fa-chevron-down me-1"></i>Load More
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- jQuery (if not already included) -->
+ 
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+<!-- Toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+let earningsOffset = 0;
+let referralsOffset = 0;
+let withdrawalsOffset = 0;
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadStats();
+  loadEarnings();
+});
+
+function loadStats() {
+  fetch('/affiliate', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: 'action=get_stats'
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.status) {
+      document.getElementById('stat-clicks').textContent = Number(d.data.stats.total_clicks || 0).toLocaleString();
+      document.getElementById('stat-signups').textContent = Number(d.data.stats.total_signups || 0).toLocaleString();
+      document.getElementById('stat-orders').textContent = Number(d.data.stats.total_orders || 0).toLocaleString();
+      document.getElementById('stat-balance').textContent = '$' + parseFloat(d.data.stats.available_balance || 0).toFixed(2);
+      document.getElementById('ref-link').value = d.data.ref_link;
+    }
+  })
+  .catch(e => {
+    console.error('Stats error:', e);
+    toastr.error('Failed to load statistics');
+  });
+}
+
+function loadEarnings() {
+  fetch('/affiliate', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `action=get_earnings&offset=${earningsOffset}`
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.status) {
+      const tbody = document.getElementById('earnings-tbody');
+      if (earningsOffset === 0) tbody.innerHTML = '';
+      
+      if (d.data.rows.length === 0 && earningsOffset === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <div>No earnings yet. Start sharing your referral link!</div>
+              </div>
+            </td>
+          </tr>`;
+        return;
+      }
+      
+      d.data.rows.forEach(row => {
+        const date = new Date(row.created_at);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="d-none d-sm-inline">${date.toLocaleDateString('en-GB')}</span><span class="d-sm-none">${date.toLocaleDateString('en-GB', {day:'2-digit', month:'short'})}</span></td>
+          <td>${row.ref_username || 'N/A'}</td>
+          <td>$${parseFloat(row.order_amount).toFixed(2)}</td>
+          <td class="text-success fw-bold">$${parseFloat(row.commission_amount).toFixed(2)}</td>
+          <td><span class="badge-success">Credited</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+      
+      document.getElementById('load-more-earnings').style.display = d.data.next_offset ? 'inline-block' : 'none';
+      earningsOffset = d.data.next_offset || earningsOffset;
+    }
+  })
+  .catch(e => {
+    console.error('Earnings error:', e);
+    toastr.error('Failed to load earnings history');
+  });
+}
+
+function loadReferrals() {
+  fetch('/affiliate', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `action=get_referrals&offset=${referralsOffset}`
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.status) {
+      const tbody = document.getElementById('referrals-tbody');
+      if (referralsOffset === 0) tbody.innerHTML = '';
+      
+      if (d.data.rows.length === 0 && referralsOffset === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <i class="fas fa-user-friends"></i>
+                <div>No referrals yet. Share your link to get started!</div>
+              </div>
+            </td>
+          </tr>`;
+        return;
+      }
+      
+      d.data.rows.forEach(row => {
+        const date = new Date(row.register_date);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${row.username}</strong></td>
+          <td class="d-none d-md-table-cell">${row.email}</td>
+          <td>${date.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'2-digit'})}</td>
+          <td><span class="badge-success">${row.order_count}</span></td>
+          <td class="fw-bold">$${parseFloat(row.total_spent).toFixed(2)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      
+      document.getElementById('load-more-referrals').style.display = d.data.next_offset ? 'inline-block' : 'none';
+      referralsOffset = d.data.next_offset || referralsOffset;
+    }
+  })
+  .catch(e => {
+    console.error('Referrals error:', e);
+    toastr.error('Failed to load referrals');
+  });
+}
+
+function loadWithdrawals() {
+  fetch('/affiliate', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `action=get_withdrawals&offset=${withdrawalsOffset}`
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.status) {
+      const tbody = document.getElementById('withdrawals-tbody');
+      if (withdrawalsOffset === 0) tbody.innerHTML = '';
+      
+      if (d.data.rows.length === 0 && withdrawalsOffset === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-state">
+                <i class="fas fa-receipt"></i>
+                <div>No withdrawal history yet.</div>
+              </div>
+            </td>
+          </tr>`;
+        return;
+      }
+      
+      d.data.rows.forEach(row => {
+        const date = new Date(row.created_at);
+        const processedDate = row.processed_at ? new Date(row.processed_at).toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'2-digit'}) : '-';
+        
+        let statusBadge = '';
+        if (row.status === 'approved') {
+          statusBadge = '<span class="badge-success">Approved</span>';
+        } else if (row.status === 'pending') {
+          statusBadge = '<span class="badge-pending">Pending</span>';
+        } else if (row.status === 'rejected') {
+          statusBadge = '<span class="badge-rejected">Rejected</span>';
+        }
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${date.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'2-digit'})}</td>
+          <td class="fw-bold">$${parseFloat(row.amount).toFixed(2)}</td>
+          <td>${statusBadge}</td>
+          <td>${processedDate}</td>
+          <td class="d-none d-lg-table-cell">${row.notes || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      
+      document.getElementById('load-more-withdrawals').style.display = d.data.next_offset ? 'inline-block' : 'none';
+      withdrawalsOffset = d.data.next_offset || withdrawalsOffset;
+    }
+  })
+  .catch(e => {
+    console.error('Withdrawals error:', e);
+    toastr.error('Failed to load withdrawal history');
+  });
+}
+
+document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
+  tab.addEventListener('shown.bs.tab', e => {
+    const href = e.target.getAttribute('href');
+    if (href === '#referrals-tab' && referralsOffset === 0) {
+      loadReferrals();
+    } else if (href === '#withdrawals-tab' && withdrawalsOffset === 0) {
+      loadWithdrawals();
+    }
+  });
+});
+
+document.getElementById('load-more-earnings').addEventListener('click', loadEarnings);
+document.getElementById('load-more-referrals').addEventListener('click', loadReferrals);
+document.getElementById('load-more-withdrawals').addEventListener('click', loadWithdrawals);
+
+function copyRefLink() {
+  const input = document.getElementById('ref-link');
+  input.select();
+  input.setSelectionRange(0, 99999); // Mobile support
+  
+  try {
+    document.execCommand('copy');
+    const btn = event.target.closest('.btn-copy');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check me-1"></i>Copied!';
+    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.background = '';
+    }, 2000);
+  } catch (err) {
+    alert('Failed to copy. Please copy manually.');
+  }
+}
+
+
+
+// ✅ FIXED FUNCTION
+function requestWithdrawal() {
+  const amount = parseFloat(document.getElementById('withdraw-amount').value);
+  
+  if (!amount || amount < 10) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Invalid Amount',
+      text: 'Minimum withdrawal is $10',
+      confirmButtonColor: '#667eea'
+    });
+    return;
+  }
+  
+  Swal.fire({
+    title: 'Confirm Withdrawal',
+    html: `Request withdrawal of <strong>$${amount.toFixed(2)}</strong>?<br><small>Amount will be added to your main balance instantly.</small>`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#10b981',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Yes, Withdraw',
+    cancelButtonText: 'Cancel'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // ✅ FIX: Use querySelector instead of event.target
+      const btn = document.querySelector('.btn-withdraw');
+      
+      if (!btn) {
+        toastr.error('Button not found');
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Processing...';
+      
+      fetch('/affiliate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `action=request_withdrawal&amount=${amount}`
+      })
+      .then(r => r.json())
+      .then(d => {
+        if (d.status) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: d.message,
+            confirmButtonColor: '#10b981'
+          });
+          document.getElementById('withdraw-amount').value = '';
+          loadStats();
+          withdrawalsOffset = 0;
+          loadWithdrawals();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Withdrawal Failed',
+            text: d.message,
+            confirmButtonColor: '#ef4444'
+          });
+        }
+      })
+      .catch(e => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Request failed. Please try again.',
+          confirmButtonColor: '#ef4444'
+        });
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane me-1"></i>Request';
+      });
+    }
+  });
+}
+</script>
+
+{% include 'footer.twig' %}

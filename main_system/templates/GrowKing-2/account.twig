@@ -1,0 +1,82 @@
+{% include 'header.twig' %}
+
+<div class="container-fluid px-3 px-lg-5 py-4" style="max-width:1200px;margin:auto">
+  <div class="row g-4">
+
+    {# ----  LEFT  ---- #}
+    <div class="col-lg-6">
+
+      {#  User Info  #}
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-transparent py-3">
+          <h6 class="mb-0"><i class="far fa-user-circle me-2"></i>User Info</h6>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" value="{{ user.username }}" readonly>
+          </div>
+          <div class="mb-0">
+            <label class="form-label">Email Address</label>
+            <input type="text" class="form-control" value="{{ user.email }}" readonly>
+          </div>
+        </div>
+      </div>
+
+      {#  Change Password  #}
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-transparent py-3">
+          <h6 class="mb-0"><i class="far fa-lock me-2"></i>Change Password</h6>
+        </div>
+        <div class="card-body">
+          <form method="post" action="account">
+            <div class="mb-3">
+              <label class="form-label">{{ lang['account.password.current'] }}</label>
+              <input type="password" class="form-control" name="current_password" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ lang['account.password.new'] }}</label>
+              <input type="password" class="form-control" name="password" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">{{ lang['account.password.confirm'] }}</label>
+              <input type="password" class="form-control" name="confirm_password" required>
+            </div>
+            <input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-primary w-100">{{ lang['account.password.button'] }}</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    {# ----  RIGHT  ---- #}
+    <div class="col-lg-6">
+
+      {#  Timezone  #}
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-transparent py-3">
+          <h6 class="mb-0"><i class="far fa-clock me-2"></i>Timezone</h6>
+        </div>
+        <div class="card-body">
+          <form method="post" action="account/timezone">
+            <div class="mb-3">
+              <label class="form-label">Select Timezone</label>
+              <select class="form-select" name="timezone">
+                {% for tz, name in timezones %}
+                  <option value="{{ tz }}" {% if tz == user.timezone %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-primary w-100">Save Timezone</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% include 'footer.twig' %}

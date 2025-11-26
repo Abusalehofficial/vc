@@ -1,0 +1,1062 @@
+{% include 'header.twig' %}
+
+<style>
+/* Main Container */
+.sms-main {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #f5f7fa;
+    min-height: calc(100vh - 60px);
+}
+
+/* Balance Section */
+.balance-section {
+    background: white;
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.balance-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.balance-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.balance-label {
+    color: #6b7280;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.balance-amount {
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.balance-coin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+/* Tabs */
+.tabs-section {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tabs-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+}
+
+.tab-btn {
+    padding: 16px 32px;
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.tab-btn:hover {
+    color: #374151;
+}
+
+.tab-btn.active {
+    color: #111827;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #3b82f6;
+}
+
+/* Services Grid */
+.services-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.section-title {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 12px;
+}
+
+/* Service Card */
+.service-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.service-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    transform: translateY(-1px);
+}
+
+.service-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+/* Dynamic service colors based on service name */
+.service-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743); }
+.service-icon.google { background: #ea4335; }
+.service-icon.whatsapp { background: #25d366; }
+.service-icon.facebook { background: #1877f2; }
+.service-icon.telegram { background: #0088cc; }
+.service-icon.twitter { background: #1da1f2; }
+.service-icon.tiktok { background: #000000; }
+.service-icon.apple { background: #000000; }
+.service-icon.viber { background: #7360f2; }
+.service-icon.snapchat { background: #fffc00; color: #000 !important; }
+.service-icon.linkedin { background: #0077b5; }
+.service-icon.discord { background: #5865f2; }
+.service-icon.default { background: #6b7280; }
+
+.service-info {
+    flex: 1;
+}
+
+.service-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.service-count {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.service-arrow {
+    color: #9ca3af;
+    font-size: 18px;
+}
+
+/* Country Selection Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+.modal-container {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 18px;
+}
+
+.modal-close:hover {
+    background: #e5e7eb;
+}
+
+.modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.search-box {
+    margin-bottom: 15px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-input:focus {
+    border-color: #3b82f6;
+}
+
+.country-list {
+    display: grid;
+    gap: 8px;
+}
+
+.country-item {
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.country-item:hover {
+    background: #f3f4f6;
+    border-color: #3b82f6;
+}
+
+.country-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.country-flag {
+    font-size: 24px;
+}
+
+.country-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.country-price {
+    text-align: right;
+}
+
+.price-amount {
+    font-size: 15px;
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.price-count {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Order Summary */
+.order-summary {
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.summary-label {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.summary-value {
+    color: #111827;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.summary-total {
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.summary-total .summary-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #3b82f6;
+}
+
+.order-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-cancel {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.btn-cancel:hover {
+    background: #e5e7eb;
+}
+
+.btn-confirm {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background: #2563eb;
+}
+
+.btn-confirm:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Orders Container */
+.orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: none;
+}
+
+.orders-container.show {
+    display: block;
+}
+
+.orders-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.orders-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th {
+    background: #f9fafb;
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.orders-table td {
+    padding: 12px;
+    font-size: 14px;
+    color: #111827;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.orders-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-waiting {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-expired {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.status-success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.btn-view {
+    padding: 6px 12px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-view:hover {
+    background: #2563eb;
+}
+
+/* Loading */
+.loading-container {
+    text-align: center;
+    padding: 40px;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.empty-icon {
+    font-size: 48px;
+    color: #e5e7eb;
+    margin-bottom: 16px;
+}
+
+.empty-text {
+    font-size: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .tab-btn {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    
+    .balance-amount {
+        font-size: 24px;
+    }
+    
+    .orders-table {
+        overflow-x: auto;
+    }
+    
+    .orders-table table {
+        min-width: 600px;
+    }
+}
+</style>
+{# ----------  CSS  ---------- #}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<style>
+/* -----  TOASTR mobile tweak  ----- */
+#toast-container > div { width: auto !important; max-width: 90vw; }
+/* -----  SEARCH BAR  ----- */
+.search-bar {
+    margin: 0 auto 15px;
+    max-width: 600px;
+}
+.search-bar input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 15px;
+}
+</style>
+
+<div class="sms-main">
+    <!-- =====  BALANCE  ===== -->
+    <div class="balance-section">
+        <div class="balance-container">
+            <div class="balance-content">
+                <span class="balance-label">Balance</span>
+                <span class="balance-amount" id="userBalance">0<span class="balance-coin">$</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====  TABS  ===== -->
+    <div class="tabs-section">
+        <div class="tabs-container">
+            <button class="tab-btn active" data-tab="activations" onclick="switchTab('activations')">
+                <i class="fas fa-mobile-alt"></i> Activations
+            </button>
+            <button class="tab-btn" data-tab="orders" onclick="switchTab('orders')">
+                <i class="fas fa-list"></i> Orders
+            </button>
+        </div>
+    </div>
+
+    <!-- =====  COUNTRY GRID  (was “Services Section”)  ===== -->
+    <div class="services-section" id="activationsTab">
+        <div class="section-title">Choose a Country</div>
+        <div class="search-bar">
+            <input type="text" id="countrySearchGrid" placeholder="Search countries…" onkeyup="filterCountriesGrid()">
+        </div>
+        <div class="services-grid" id="countriesGrid">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p style="margin-top: 10px; color: #6b7280;">Loading countries…</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====  ORDERS  ===== -->
+    <div class="orders-container" id="ordersTab">
+        <div class="orders-table">
+            <table>
+                <thead>
+                    <tr>
+                   <th>Order Id</th><th>     <th>Time</th><th>Service</th><th>Country</th>
+                        <th>Phone</th><th>Status</th><th>Code</th><th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr>
+                        <td colspan="7">
+                            <div class="loading-container"><div class="loading-spinner"></div></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- =====  MODAL  (services + price)  ===== -->
+<div class="modal-overlay" id="countryModal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <div class="modal-title">
+                <span id="modalServiceIcon"></span>
+                <span id="modalServiceName"></span>
+            </div>
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <!-- search services -->
+            <div class="search-box">
+                <input type="text" class="search-input" id="serviceSearchModal" placeholder="Search services…" onkeyup="filterServicesModal()">
+            </div>
+            <div class="country-list" id="countryList">
+                <div class="loading-container"><div class="loading-spinner"></div></div>
+            </div>
+            <div class="order-summary" id="orderSummary" style="display:none;">
+                <div class="summary-row"><span class="summary-label">Service:</span><span class="summary-value" id="summaryService"></span></div>
+                <div class="summary-row"><span class="summary-label">Country:</span><span class="summary-value" id="summaryCountry"></span></div>
+                <div class="summary-row summary-total"><span class="summary-label">Total Price:</span><span class="summary-value" id="summaryPrice"></span></div>
+                <div class="order-actions">
+                    <button class="btn btn-cancel" onclick="cancelOrder()">Cancel</button>
+                    <button class="btn btn-confirm" id="confirmBtn" onclick="confirmOrder()"><i class="fas fa-check"></i> Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ----------  JS  ---------- -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+/* ==========================================================
+   1.  GLOBALS
+   ========================================================== */
+let countries   = [];
+let services    = [];
+let currentCountry = null;
+let currentService = null;
+let userBalance = {{ user['balance'] ?? 0 }};
+
+document.getElementById('userBalance').innerHTML = userBalance.toFixed(2) + '<span class="balance-coin">$</span>';
+
+/* ==========================================================
+   2.  TOASTR  (responsive)
+   ========================================================== */
+toastr.options = {
+    positionClass: 'toast-top-center',
+    timeOut: 2000,
+    progressBar: true,
+    preventDuplicates: true
+};
+function toast(type, title, body=''){
+    toastr[type](body, title);
+}
+
+/* ==========================================================
+   3.  ENTRY-POINT
+   ========================================================== */
+$(function(){
+    loadCountries();
+    startAutoRefresh();
+    $(document).on('keyup', e => e.key === "Escape" && closeModal());
+    $('#countryModal').on('click', e => $(e.target).hasClass('modal-overlay') && closeModal());
+});
+
+/* ==========================================================
+   4.  COUNTRY GRID  +  SEARCH
+   ========================================================== */
+function loadCountries(){
+    const grid = $('#countriesGrid').html('<div class="loading-container"><div class="loading-spinner"></div></div>');
+    $.post('', {action:'u_countries'}, res => {
+        if(res.status && res.data && res.data.rows){
+            countries = res.data.rows;
+        }else{
+            countries = [
+                {id:1, name:'United States', flag:'🇺🇸'},
+                {id:2, name:'United Kingdom', flag:'🇬🇧'},
+                {id:3, name:'Canada', flag:'🇨🇦'}
+            ];
+        }
+        renderCountriesGrid();
+    },'json').fail(() => loadCountries());
+}
+
+function renderCountriesGrid(filter=''){
+    const grid = $('#countriesGrid').empty();
+    const f = filter ? countries.filter(c => c.name.toLowerCase().includes(filter.toLowerCase())) : countries;
+    if(!f.length){
+        grid.html('<div class="empty-state"><div class="empty-icon"><i class="fas fa-globe"></i></div><div class="empty-text">No countries found</div></div>');
+        return;
+    }
+    f.forEach(c => {
+        // Check if flag is an image URL or emoji
+        let flagDisplay;
+        if (c.flag && c.flag.startsWith('/')) {
+            // Custom uploaded image
+            flagDisplay = `<img src="${c.flag}" alt="${c.name}" style="width:32px;height:32px;object-fit:cover;border-radius:4px;">`;
+        } else if (c.flag && c.flag.length <= 4) {
+            // Emoji flag
+            flagDisplay = c.flag;
+        } else {
+            // Fallback
+            flagDisplay = '🌍';
+        }
+        
+        const card = `
+            <div class="service-card" data-country-id="${c.id}">
+                <div class="service-icon default">${flagDisplay}</div>
+                <div class="service-info">
+                    <div class="service-name">${c.name}</div>
+                    <div class="service-count">Tap to see services</div>
+                </div>
+                <div class="service-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>`;
+        grid.append(card);
+    });
+}
+
+$(document).on('click','#countriesGrid .service-card', function(){
+    const id   = $(this).data('country-id');
+    const name = $(this).find('.service-name').text();
+    selectCountry(id, name);
+});
+
+function filterCountriesGrid(){
+    const kw = $('#countrySearchGrid').val().toLowerCase();
+    renderCountriesGrid(kw);
+}
+
+/* ==========================================================
+   5.  MODAL  –  SERVICES  +  SEARCH
+   ========================================================== */
+function selectCountry(countryId, countryName){
+    currentCountry = {id:countryId, name:countryName};
+    $('#modalServiceIcon').html('<i class="fas fa-flag"></i>');
+    $('#modalServiceName').text(countryName);
+    $('#countryModal').addClass('show');
+    $('#countryList').html('<div class="loading-container"><div class="loading-spinner"></div></div>');
+    $('#orderSummary').hide();
+
+    $.post('', {action:'u_services', country_id:countryId}, res => {
+        if(res.status && res.data && res.data.rows){
+            services = res.data.rows;
+        }else{
+            services = [
+                {id:'ig', name:'Instagram', icon_class:'instagram', icon_fa:'fab fa-instagram'},
+                {id:'go', name:'Google', icon_class:'google', icon_fa:'fab fa-google'}
+            ];
+        }
+        renderServicesModal();
+    },'json');
+}
+
+function renderServicesModal(filter=''){
+    const list = $('#countryList').empty();
+    const f = filter ? services.filter(s => s.name.toLowerCase().includes(filter.toLowerCase())) : services;
+    
+    if(!f.length){
+        list.html('<div class="empty-state"><div class="empty-text">No services found</div></div>');
+        return;
+    }
+    
+    f.forEach(s => {
+        const name = s.name;
+        
+        // Determine icon display
+        let iconHtml;
+        if (s.icon && s.icon.startsWith('/')) {
+            // Custom uploaded logo (image)
+            iconHtml = `<img src="${s.icon}" alt="${name}" style="width:28px;height:28px;object-fit:cover;border-radius:50%;">`;
+        } else if (s.icon_fa) {
+            // Font Awesome icon from backend
+            iconHtml = `<i class="${s.icon_fa}"></i>`;
+        } else {
+            // Client-side fallback
+            const fallbackIcon = getServiceIcon(name);
+            iconHtml = `<i class="${fallbackIcon}"></i>`;
+        }
+        
+        // Get icon class for styling
+        const iconClass = s.icon_class || getServiceClass(name);
+        
+        const item = `
+            <div class="country-item" onclick="selectService('${s.id}', '${name.replace(/'/g,"\\'")}')">
+                <div class="country-info">
+                    <span class="service-icon ${iconClass}" style="width:28px;height:28px;font-size:16px;display:inline-flex;align-items:center;justify-content:center;">
+                        ${iconHtml}
+                    </span>
+                    <span class="country-name">${name}</span>
+                </div>
+            </div>`;
+        list.append(item);
+    });
+}
+
+function filterServicesModal(){
+    const kw = $('#serviceSearchModal').val().toLowerCase();
+    $('#countryList .country-item').each(function(){
+        const txt = $(this).find('.country-name').text().toLowerCase();
+        $(this).toggle(txt.includes(kw));
+    });
+}
+
+/* ==========================================================
+   6.  PRICE  +  ORDER
+   ========================================================== */
+function selectService(serviceId, serviceName){
+    currentService = {id: serviceId, name: serviceName};
+    
+    $.post('', {action: 'get_price_db', country_id: currentCountry.id, service_id: serviceId}, res => {
+        if(res.status && res.data){
+            const price = res.data.provider_price;
+            $('#summaryService').text(currentService.name);
+            $('#summaryCountry').text(currentCountry.name);
+            $('#summaryPrice').text(price);
+            
+            const $orderSummary = $('#orderSummary');
+            const $modalBody = $('.modal-body');
+            
+            $orderSummary.show();
+            
+            // Calculate scroll position after element is visible
+            const targetTop = $orderSummary.get(0).offsetTop - $modalBody.get(0).offsetTop;
+            
+            $modalBody.animate({
+                scrollTop: targetTop
+            }, 300);
+            
+        } else {
+            toast('error', 'Price not found', res.message || 'No price for this combination');
+        }
+    }, 'json');
+}
+
+function cancelOrder(){
+    $('#orderSummary').hide();
+    currentService = null;
+}
+
+function closeModal(){
+    $('#countryModal').removeClass('show');
+    currentCountry = null;
+    currentService = null;
+    $('#orderSummary').hide();
+    $('#serviceSearchModal').val('');
+}
+
+function confirmOrder(){
+    if(!currentCountry || !currentService) return;
+    const btn = $('#confirmBtn').prop('disabled',true).html('<i class="fas fa-spinner fa-spin"></i> Creating...');
+    $.post('', {action:'u_create_order', country_id:currentCountry.id, service_id:currentService.id}, res => {
+        btn.prop('disabled',false).html('<i class="fas fa-check"></i> Confirm Order');
+        if(res.status){
+            closeModal();
+            toast('success', 'Order Created', 'Redirecting…');
+            setTimeout(() => {
+                if(res.data && res.data.activation_id){
+                    window.location.href = 'activation?aid='+res.data.activation_id;
+                }else{
+                    switchTab('orders');
+                }
+            }, 1200);
+        }else{
+            toast('error', 'Order Failed', res.message || 'Insufficient balance or service unavailable');
+        }
+    },'json').fail(() => {
+        btn.prop('disabled',false).html('<i class="fas fa-check"></i> Confirm Order');
+        toast('error', 'Network Error', 'Please try again');
+    });
+}
+
+/* ==========================================================
+   7.  TABS  &  ORDERS
+   ========================================================== */
+function switchTab(tab){
+    $('.tab-btn').removeClass('active');
+    $(`.tab-btn[data-tab="${tab}"]`).addClass('active');
+    if(tab==='orders'){
+        $('#activationsTab').hide();
+        $('#ordersTab').addClass('show');
+        loadOrders();
+    }else{
+        $('#activationsTab').show();
+        $('#ordersTab').removeClass('show');
+    }
+}
+
+let refreshInterval = null;
+function startAutoRefresh(){
+    if(refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = setInterval(() => {
+        if($('#ordersTab').hasClass('show')) loadOrders();
+    }, 10000);
+}
+
+function loadOrders(){
+    const tbody = $('#ordersTableBody');
+    tbody.html('<tr><td colspan="7"><div class="loading-container"><div class="loading-spinner"></div></div></td></tr>');
+    $.post('', {action:'u_orders', limit:50, offset:0}, res => {
+        tbody.empty();
+        if(!res.status || !res.data || !res.data.rows || !res.data.rows.length){
+            tbody.html('<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i class="fas fa-inbox"></i></div><div class="empty-text">No orders found</div></div></td></tr>');
+            return;
+        }
+        res.data.rows.forEach(o => {
+            const row = `
+                <tr>
+                                    <td>${o.id}</td>
+                    <td>${formatTime(o.created_at)}</td>
+                    <td>${o.service_name||o.service_id}</td>
+                    <td>${o.country_name||o.country_id}</td>
+                    <td><strong>${o.phone||'Waiting...'}</strong></td>
+                    <td><span class="status-badge ${getStatusClass(o.status)}">${o.status||'Pending'}</span></td>
+                    <td><strong>${o.otp_code||'-'}</strong></td>
+                    <td>${o.activation_id?`<a href="activation?aid=${o.activation_id}" class="btn-view">View</a>`:'-'}</td>
+                </tr>`;
+            tbody.append(row);
+        });
+    },'json').fail(() => {
+        tbody.html('<tr><td colspan="7"><div class="empty-state"><div class="empty-text">Failed to load orders</div></div></td></tr>');
+    });
+}
+
+function getStatusClass(s){
+    if(!s) return 'status-waiting';
+    const t = s.toLowerCase();
+    if(t.includes('success')||t.includes('active')||t.includes('complete')) return 'status-success';
+    if(t.includes('expired')||t.includes('cancel')) return 'status-expired';
+    if(t.includes('wait')||t.includes('pending')) return 'status-waiting';
+    return 'status-waiting';
+}
+
+function formatTime(ts){
+    if(!ts) return '-';
+    const d = new Date(ts), now = new Date(), sec = Math.floor((now-d)/1000);
+    if(sec<60) return 'Just now';
+    if(sec<3600) return Math.floor(sec/60)+' min ago';
+    if(sec<86400) return Math.floor(sec/3600)+' hours ago';
+    return d.toLocaleDateString();
+}
+
+/* ==========================================================
+   8.  HELPERS - CLIENT-SIDE FALLBACKS
+   ========================================================== */
+function getCountryFlag(code){
+    const flags = {
+        'US':'🇺🇸', 'GB':'🇬🇧', 'CA':'🇨🇦', 'DE':'🇩🇪', 'FR':'🇫🇷', 
+        'IN':'🇮🇳', 'AU':'🇦🇺', 'BR':'🇧🇷', 'CN':'🇨🇳', 'JP':'🇯🇵',
+        'MX':'🇲🇽', 'RU':'🇷🇺', 'ES':'🇪🇸', 'IT':'🇮🇹', 'NL':'🇳🇱',
+        'SE':'🇸🇪', 'PL':'🇵🇱', 'TR':'🇹🇷', 'KR':'🇰🇷', 'ID':'🇮🇩',
+        'TH':'🇹🇭', 'VN':'🇻🇳', 'PH':'🇵🇭', 'MY':'🇲🇾', 'SG':'🇸🇬',
+        'PK':'🇵🇰', 'BD':'🇧🇩', 'NG':'🇳🇬', 'EG':'🇪🇬', 'ZA':'🇿🇦',
+        'AR':'🇦🇷', 'CO':'🇨🇴', 'CL':'🇨🇱', 'PE':'🇵🇪', 'VE':'🇻🇪',
+        'UA':'🇺🇦', 'RO':'🇷🇴', 'CZ':'🇨🇿', 'PT':'🇵🇹', 'GR':'🇬🇷',
+        'BE':'🇧🇪', 'AT':'🇦🇹', 'CH':'🇨🇭', 'IL':'🇮🇱', 'SA':'🇸🇦',
+        'AE':'🇦🇪', 'KZ':'🇰🇿', 'DK':'🇩🇰', 'NO':'🇳🇴', 'FI':'🇫🇮',
+        'IE':'🇮🇪', 'NZ':'🇳🇿', 'HK':'🇭🇰', 'TW':'🇹🇼'
+    };
+    return flags[code] || '🌍';
+}
+
+function getServiceClass(n){
+    const name = (n||'').toLowerCase();
+    if(name.includes('instagram')) return 'instagram';
+    if(name.includes('google')||name.includes('gmail')||name.includes('youtube')) return 'google';
+    if(name.includes('whatsapp')) return 'whatsapp';
+    if(name.includes('facebook')||name.includes('meta')) return 'facebook';
+    if(name.includes('telegram')) return 'telegram';
+    if(name.includes('twitter')||name.includes('x.com')) return 'twitter';
+    if(name.includes('tiktok')) return 'tiktok';
+    if(name.includes('apple')||name.includes('icloud')) return 'apple';
+    if(name.includes('viber')) return 'viber';
+    if(name.includes('snapchat')) return 'snapchat';
+    if(name.includes('linkedin')) return 'linkedin';
+    if(name.includes('discord')) return 'discord';
+    if(name.includes('microsoft')||name.includes('outlook')) return 'microsoft';
+    if(name.includes('amazon')) return 'amazon';
+    if(name.includes('netflix')) return 'netflix';
+    if(name.includes('spotify')) return 'spotify';
+    if(name.includes('uber')) return 'uber';
+    if(name.includes('paypal')) return 'paypal';
+    if(name.includes('stripe')) return 'stripe';
+    if(name.includes('reddit')) return 'reddit';
+    if(name.includes('twitch')) return 'twitch';
+    if(name.includes('steam')) return 'steam';
+    if(name.includes('yahoo')) return 'yahoo';
+    if(name.includes('tinder')) return 'tinder';
+    if(name.includes('wechat')) return 'wechat';
+    if(name.includes('line')) return 'line';
+    if(name.includes('kakao')) return 'kakao';
+    return 'default';
+}
+
+function getServiceIcon(n){
+    const name = (n||'').toLowerCase();
+    if(name.includes('instagram')) return 'fab fa-instagram';
+    if(name.includes('google')||name.includes('gmail')) return 'fab fa-google';
+    if(name.includes('youtube')) return 'fab fa-youtube';
+    if(name.includes('whatsapp')) return 'fab fa-whatsapp';
+    if(name.includes('facebook')||name.includes('meta')) return 'fab fa-facebook-f';
+    if(name.includes('telegram')) return 'fab fa-telegram';
+    if(name.includes('twitter')) return 'fab fa-twitter';
+    if(name.includes('x.com')) return 'fab fa-x-twitter';
+    if(name.includes('tiktok')) return 'fab fa-tiktok';
+    if(name.includes('apple')||name.includes('icloud')) return 'fab fa-apple';
+    if(name.includes('viber')) return 'fab fa-viber';
+    if(name.includes('snapchat')) return 'fab fa-snapchat';
+    if(name.includes('linkedin')) return 'fab fa-linkedin';
+    if(name.includes('discord')) return 'fab fa-discord';
+    if(name.includes('microsoft')||name.includes('outlook')) return 'fab fa-microsoft';
+    if(name.includes('amazon')) return 'fab fa-amazon';
+    if(name.includes('netflix')) return 'fas fa-film';
+    if(name.includes('spotify')) return 'fab fa-spotify';
+    if(name.includes('uber')) return 'fab fa-uber';
+    if(name.includes('paypal')) return 'fab fa-paypal';
+    if(name.includes('stripe')) return 'fab fa-stripe';
+    if(name.includes('reddit')) return 'fab fa-reddit';
+    if(name.includes('twitch')) return 'fab fa-twitch';
+    if(name.includes('steam')) return 'fab fa-steam';
+    if(name.includes('yahoo')) return 'fab fa-yahoo';
+    if(name.includes('tinder')) return 'fas fa-fire';
+    if(name.includes('wechat')) return 'fab fa-weixin';
+    if(name.includes('line')) return 'fab fa-line';
+    if(name.includes('kakao')) return 'fas fa-comment';
+    return 'fas fa-mobile-alt';
+}
+</script>
+{% include 'footer.twig' %}

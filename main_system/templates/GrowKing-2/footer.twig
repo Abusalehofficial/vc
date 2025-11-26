@@ -1,0 +1,400 @@
+<style>
+<style>
+    /* ---------- GLOBAL FOOTER OVERLAP GUARD ---------- */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Every page wrapper you actually use */
+.container-fluid,
+.container-fluid-spacious,
+#main-wrapper,
+.main-content,
+.content-wrapper {
+  flex: 1 0 auto;
+  padding-bottom: 2rem;
+}
+
+/* The footer */
+footer {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  margin-top: auto;
+}
+
+/* ---------- MOBILE BOTTOM NAVIGATION ---------- */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: none;
+  border-top: 2px solid #374151;
+  height: 70px;
+}
+
+.mobile-bottom-nav .nav-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  max-width: 100%;
+  height: 100%;
+}
+
+.mobile-bottom-nav .nav-item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.mobile-bottom-nav .nav-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  color: #9ca3af;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  margin: 0 4px;
+}
+
+.mobile-bottom-nav .nav-link:hover,
+.mobile-bottom-nav .nav-link.active {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.mobile-bottom-nav .nav-link.active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  border-radius: 0 0 3px 3px;
+}
+
+.mobile-bottom-nav .nav-icon {
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+.mobile-bottom-nav .nav-text {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- WHATSAPP FLOATING BUTTON ---------- */
+.whatsapp-float {
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: #25D366;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  text-decoration: none;
+}
+
+.whatsapp-float i {
+  color: white;
+  font-size: 30px;
+}
+
+/* ---------- MOBILE RESPONSIVE FIXES ---------- */
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: block;
+  }
+  
+  body {
+    padding-bottom: 90px !important;
+  }
+  
+  footer {
+    margin-bottom: 90px;
+  }
+  
+  /* Page content spacing */
+  .container-fluid,
+  .container-fluid-spacious,
+  #main-wrapper,
+  .main-content,
+  .content-wrapper {
+    padding-bottom: 5rem !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  /* Card and form spacing */
+  .card-body {
+    padding-bottom: 4rem !important;
+  }
+  
+  .tab-content {
+    padding-bottom: 3rem !important;
+  }
+  
+  .tab-pane {
+    padding-bottom: 3rem !important;
+  }
+  
+  /* Button spacing */
+  .btn-primary,
+  .btn-lg,
+  .d-grid .btn {
+    margin-bottom: 3rem !important;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Form spacing */
+  form.row,
+  form {
+    padding-bottom: 3rem !important;
+  }
+  
+  /* Table responsive spacing */
+  .table-responsive {
+    margin-bottom: 3rem !important;
+  }
+  
+  /* Payment form specific fixes */
+  .form-card .card-body {
+    padding-bottom: 5rem !important;
+  }
+  
+  /* Payment instructions spacing */
+  #payment-instructions {
+    margin-bottom: 2rem !important;
+  }
+  
+  /* Extra spacing for last elements */
+  .col-12:last-child,
+  .row:last-child {
+    margin-bottom: 2rem !important;
+  }
+  
+  /* Ensure payment buttons are always visible */
+  button[type="submit"],
+  input[type="submit"],
+  .btn-primary {
+    margin-bottom: 4rem !important;
+    padding: 1rem 2rem !important;
+  }
+  
+  /* WhatsApp button mobile positioning */
+  .whatsapp-float {
+    bottom: 85px;
+    right: 15px;
+    width: 55px;
+    height: 55px;
+  }
+  
+  .whatsapp-float i {
+    font-size: 26px;
+  }
+}
+
+/* ---------- DESKTOP RESPONSIVE ---------- */
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+  
+  body {
+    padding-bottom: 0;
+  }
+  
+  footer {
+    margin-bottom: 0;
+  }
+  
+  .whatsapp-float {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  /* Reset mobile-specific spacing on desktop */
+  .container-fluid,
+  .container-fluid-spacious,
+  #main-wrapper,
+  .main-content,
+  .content-wrapper {
+    padding-bottom: 2rem !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .card-body,
+  .tab-content,
+  .tab-pane,
+  form.row,
+  form {
+    padding-bottom: inherit !important;
+  }
+  
+  /* Ensure payment buttons are always visible */
+  button[type="submit"],
+  input[type="submit"],
+  .btn-primary {
+    margin-bottom: 4rem !important;
+    padding: 1rem 2rem !important;
+  }
+}
+
+/* ---------- ACTIVE STATE ANIMATION ---------- */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.mobile-bottom-nav .nav-link.active .nav-icon {
+  animation: bounce 0.5s ease;
+}
+
+/* ---------- SAFE AREA INSETS FOR NEWER PHONES ---------- */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 768px) {
+    .mobile-bottom-nav {
+      padding-bottom: env(safe-area-inset-bottom);
+      height: calc(70px + env(safe-area-inset-bottom));
+    }
+    
+    body {
+      padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+    }
+    
+    .whatsapp-float {
+      bottom: calc(85px + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+/* ---------- SCROLL BEHAVIOR IMPROVEMENTS ---------- */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* Ensure content is always above mobile nav */
+main,
+.main,
+#content,
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fix for modals and overlays */
+.modal,
+.offcanvas,
+.dropdown-menu {
+  z-index: 1050;
+}
+
+/* Fix for payment forms in modals */
+.modal .btn-primary,
+.modal button[type="submit"] {
+  margin-bottom: 1rem !important;
+}
+
+@media (max-width: 768px) {
+  .modal .btn-primary,
+  .modal button[type="submit"] {
+    margin-bottom: 2rem !important;
+  }
+}
+</style>
+</style>
+            {% if user['auth'] %}
+
+<!-- Mobile Bottom Navigation -->
+<nav class="mobile-bottom-nav">
+  <div class="nav-container">
+    
+    <!-- Orders -->
+    <div class="nav-item">
+      <a href="{{ site.url }}" class="nav-link {% if active_menu == 'sms' %}active{% endif %}">
+        <i class="fas fa-list-alt nav-icon"></i>
+        <span class="nav-text">Orders</span>
+      </a>
+    </div>
+    
+    <!-- Add Funds -->
+    <div class="nav-item">
+      <a href="{{ site.url }}/addfunds" class="nav-link {% if active_menu == 'addfunds' %}active{% endif %}">
+        <i class="fas fa-wallet nav-icon"></i>
+        <span class="nav-text">Add Funds</span>
+      </a>
+    </div>
+    
+    <!-- Account -->
+    <div class="nav-item">
+      <a href="{{ site.url }}/account" class="nav-link {% if active_menu == 'settings' or active_menu == 'account' %}active{% endif %}">
+        <i class="fas fa-user-circle nav-icon"></i>
+        <span class="nav-text">Account</span>
+      </a>
+    </div>
+    
+  </div>
+</nav>
+
+             {% endif %}
+
+
+<!-- Core Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Mobile Nav Active State Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get current page path
+  const currentPath = window.location.pathname;
+  
+  // Set active state based on URL
+  document.querySelectorAll('.mobile-bottom-nav .nav-link').forEach(link => {
+    const href = link.getAttribute('href');
+    if (currentPath.includes(href.split('/').pop())) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+
+<!-- Custom Scripts -->
+{{ footerCode }}
+</body>
+</html>

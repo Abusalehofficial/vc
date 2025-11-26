@@ -1,0 +1,22 @@
+{
+  "5012": {
+    "enabled": true,
+    "content": "<strong>Cryptocurrency Payment Instructions:</strong><ol><li>Enter amount in <strong>USD ($)</strong></li><li>All coins 💎 are supported (BTC, ETH, USDT, LTC, etc.)</li><li>You will receive wallet address after clicking 'Add Funds Now'</li><li>Send exact amount to the provided address</li><li>Funds credited within 1-10 minutes after confirmation</li></ol><p><em>💬 Contact Support on WhatsApp for any issues</em></p>"
+  },
+  "990": {
+    "enabled": true,
+    "content": "<strong>Mobile Money Ghana Payment:</strong><ol><li>Enter amount in <strong>CEDIS (GHS)</strong></li><li>Exchange Rate: <code>$1 USD = 12.5 GHS</code></li><li>Supported: MTN Mobile Money, Vodafone Cash, AirtelTigo Money</li><li>You will receive payment instructions after submission</li><li>Payment is processed instantly</li></ol><p><em>💬 Contact Support on WhatsApp for any issues</em></p>"
+  },
+  "2269": {
+    "enabled": true,
+    "content": "<strong>Mobile Money CFA Payment:</strong><ol><li>Enter amount in <strong>CFA Francs (XAF)</strong></li><li>Exchange Rate: <code>$1 USD = 603 CFA</code></li><li>Supported: Orange Money, MTN Mobile Money, Moov Money</li><li>Follow the payment instructions provided</li><li>Payment processed instantly upon confirmation</li></ol><p><em>💬 Contact Support on WhatsApp for any issues</em></p>"
+  },
+  "5346": {
+    "enabled": true,
+    "content": "<strong>Nigerian Payment Methods:</strong><ol><li>Enter amount in <strong>NAIRA (₦)</strong></li><li>Exchange Rate: <code>$1 USD = ₦1,500</code></li><li>Supported: Bank Transfer, USSD Codes, Debit Cards</li><li>Complete payment using your preferred method</li><li>Processing time: 5-15 minutes</li></ol><p><em>💬 Contact Support on WhatsApp for any issues</em></p>"
+  },
+  "5": {
+    "enabled": false,
+    "content": ""
+  }
+}

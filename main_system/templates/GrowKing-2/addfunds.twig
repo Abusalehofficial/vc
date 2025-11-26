@@ -1,0 +1,363 @@
+{% include 'header.twig' %}
+
+{# Custom Alert Styles #}
+<style>
+.custom-alert {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideDown 0.4s ease-out;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.custom-alert-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-left: 4px solid #047857;
+}
+
+.custom-alert-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border-left: 4px solid #b91c1c;
+}
+
+.custom-alert i {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.custom-alert-content {
+  flex: 1;
+  line-height: 1.5;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-card {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+
+.nav-pills .nav-link {
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link.active {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.form-control, .form-select {
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 0.875rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.input-group-text {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  font-weight: 600;
+  border-radius: 10px 0 0 10px;
+  padding: 0 1.25rem;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 2px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .custom-alert {
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .custom-alert i {
+    font-size: 1.25rem;
+  }
+  
+  .form-control, .form-select {
+    padding: 0.625rem 0.875rem;
+  }
+  
+  .btn-primary {
+    padding: 0.75rem 1.25rem;
+  }
+}
+</style>
+
+{# Alert Messages #}
+{% if success %}
+  <div class="container-fluid px-3 px-lg-5" style="max-width:1200px;margin:auto;padding-top:1.5rem">
+    <div class="custom-alert custom-alert-success">
+      <i class="fas fa-check-circle"></i>
+      <div class="custom-alert-content">{{ successText }}</div>
+    </div>
+  </div>
+{% endif %}
+
+{% if error %}
+  <div class="container-fluid px-3 px-lg-5" style="max-width:1200px;margin:auto;padding-top:1.5rem">
+    <div class="custom-alert custom-alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <div class="custom-alert-content">{{ errorText }}</div>
+    </div>
+  </div>
+{% endif %}
+
+{# Main Content #}
+<div class="container-fluid px-3 px-lg-5 py-4" style="max-width:1200px;margin:auto">
+  <div class="row g-4">
+
+    {# LEFT - Payment Form #}
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm form-card">
+        <div class="card-header py-3">
+          <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="pills-order-tab" data-bs-toggle="pill" 
+                      data-bs-target="#pills-order" type="button" role="tab">
+                <i class="far fa-credit-card me-2"></i>{{ lang['addfunds.online.title'] }}
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="pills-favorite-tab" data-bs-toggle="pill" 
+                      data-bs-target="#pills-favorite" type="button" role="tab">
+                <i class="fas fa-history me-2"></i>{{ lang['addfunds.transaction.title'] }}
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-body p-4">
+          <div class="tab-content" id="pills-tabContent">
+            
+            {# Tab 1 - Add Funds #}
+            <div class="tab-pane fade show active" id="pills-order" role="tabpanel">
+              {% if paymentsList %}
+                <form method="post" action="addfunds" class="row g-4">
+                  
+                {# Payment Method #}
+<div class="col-12">
+  <label class="form-label fw-semibold mb-2">
+    <i class="fas fa-wallet me-2 text-primary"></i>{{ lang['addfunds.method'] }}
+  </label>
+  <select class="form-select form-select-lg" name="payment_type" id="payment_method_new">
+    {% for p in paymentsList %}
+      <option value="{{ p.id }}" {% if data.payment_type == p.id %}selected{% endif %}>
+        {{ p.method_name }}
+      </option>
+    {% endfor %}
+  </select>
+</div>
+
+{# Payment Instructions - Add this new section #}
+<div class="col-12" id="payment-instructions" style="display: none;">
+  <div class="alert alert-info border-0 shadow-sm" style="background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); border-radius: 12px;">
+    <div class="d-flex align-items-start gap-3">
+      <div class="instruction-icon">
+        <i class="fas fa-info-circle text-info" style="font-size: 1.5rem; margin-top: 2px;"></i>
+      </div>
+      <div class="instruction-content">
+        <h6 class="fw-bold text-info mb-2">
+          <i class="fas fa-list-ul me-2"></i>Payment Instructions
+        </h6>
+        <div id="instruction-text" class="text-dark"></div>
+      </div>
+    </div>
+  </div>
+</div>
+                  {# Amount #}
+                  <div class="col-12">
+                    <label class="form-label fw-semibold mb-2">
+                      <i class="fas fa-dollar-sign me-2 text-primary"></i>Amount
+                    </label>
+                    <div class="input-group input-group-lg">
+                      <span class="input-group-text">$</span>
+                      <input type="number" class="form-control" name="payment_amount" 
+                             min="1" step="0.01" placeholder="10.00" required>
+                    </div>
+                  </div>
+
+                  {# Submit Button #}
+                  <div class="col-12 d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      <i class="far fa-credit-card me-2"></i>Add Funds Now
+                    </button>
+                  </div>
+                </form>
+              {% else %}
+                <div class="custom-alert custom-alert-error">
+                  <i class="fas fa-info-circle"></i>
+                  <div class="custom-alert-content">{{ lang["addfunds.no.payment.method"] }}</div>
+                </div>
+              {% endif %}
+            </div>
+
+            {# Tab 2 - Transaction History #}
+            <div class="tab-pane fade" id="pills-favorite" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-hover align-middle" id="addfundTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="fw-semibold">{{ lang["addfunds.transaction.id"] }}</th>
+                      <th class="fw-semibold">{{ lang["addfunds.transaction.amount"] }}</th>
+                      <th class="fw-semibold">{{ lang["addfunds.transaction.method"] }}</th>
+                      <th class="fw-semibold">{{ lang["addfunds.transaction.date"] }}</th>
+                      <th class="fw-semibold">{{ lang["addfunds.transaction.transId"] }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if transactions %}
+                      {% for t in transactions %}
+                        <tr>
+                          <td><span class="badge bg-secondary">#{{ t.payment_id }}</span></td>
+                          <td><span class="badge bg-success fs-6">{{ convert_currency(t.payment_amount) }}</span></td>
+                          <td>{{ t.method_name }}</td>
+                          <td><small class="text-muted">{{ show_date(t.payment_create_date) }}</small></td>
+                          <td><code class="text-muted">{{ t.payment_extra }}</code></td>
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                          <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                          No transactions yet
+                        </td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# RIGHT - Coupon Card #}
+    {% if settings.coupon_system == 2 %}
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm form-card h-100">
+          <div class="card-header py-3">
+            <h6 class="mb-0 fw-semibold">
+              <i class="fas fa-ticket-alt me-2 text-primary"></i>{{ lang["addfunds.coupon.label"] }}
+            </h6>
+          </div>
+          <div class="card-body p-4">
+            <form method="post" action="kupon">
+              <div class="mb-3">
+                <label class="form-label fw-semibold mb-2">
+                  <i class="fas fa-tag me-2 text-primary"></i>{{ lang["addfunds.coupon.label"] }}
+                </label>
+                <input type="text" class="form-control form-control-lg" 
+                       name="kuponadi" placeholder="Enter coupon code">
+              </div>
+              <input type="hidden" name="crsf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-check-circle me-2"></i>{{ lang["addfunds.coupon.button.text"] }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentSelect = document.getElementById('payment_method_new');
+    const instructionsDiv = document.getElementById('payment-instructions');
+    const instructionText = document.getElementById('instruction-text');
+    
+    let instructionsData = {};
+    
+    // Load instructions from JSON file
+    async function loadInstructions() {
+        try {
+            const response = await fetch('/instructions.json');
+            if (response.ok) {
+                instructionsData = await response.json();
+                // Show instructions for initially selected payment method
+                showInstructions(paymentSelect.value);
+            }
+        } catch (error) {
+            console.log('Instructions file not found or invalid');
+        }
+    }
+    
+    // Show instructions for selected payment method
+    function showInstructions(paymentId) {
+        const instruction = instructionsData[paymentId];
+        
+        if (instruction && instruction.enabled) {
+            instructionText.innerHTML = instruction.content;
+            instructionsDiv.style.display = 'block';
+            instructionsDiv.classList.add('instruction-fade-in');
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                instructionsDiv.classList.remove('instruction-fade-in');
+            }, 400);
+        } else {
+            instructionsDiv.style.display = 'none';
+        }
+    }
+    
+    // Handle payment method change
+    paymentSelect.addEventListener('change', function() {
+        showInstructions(this.value);
+    });
+    
+    // Initialize
+    loadInstructions();
+});
+</script>
+{% include 'footer.twig' %}
